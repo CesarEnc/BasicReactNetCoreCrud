@@ -1,6 +1,8 @@
 using NUnit.Framework;
+using Persons.Api.Exceptions;
 using PersonsApi.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Persons.Tests
@@ -10,44 +12,53 @@ namespace Persons.Tests
         [Test]
         public void GetPersons_IsNotEmpty()
         {
-            var service = Utils.Helper.GetPersonService();
-            
-            Assert.IsNotEmpty(service.GetAll());
+            var personService = Utils.Helper.GetPersonService();
+
+            Assert.IsNotEmpty(personService.GetAll());
         }
 
         [Test]
         public void PostPersons_IsSaving()
         {
             var person = new Person { Name = "Juan", SurName = "ele", Mail = "Test@gmail.com" };
-            var service = Utils.Helper.GetPersonService();
-            
-            service.Add(person);
+            var personService = Utils.Helper.GetPersonService();
 
-            Assert.IsTrue(service.GetAll().Contains(person));
+            personService.Add(person);
+
+            Assert.IsTrue(personService.GetAll().Contains(person));
         }
         [Test]
         public void DeletePersons_IsDeletingAll()
         {
-            var service = Utils.Helper.GetPersonService();
+            var personService = Utils.Helper.GetPersonService();
 
-            foreach (var person in service.GetAll())
+            foreach (var person in personService.GetAll())
             {
-                service.Delete(person.Id);
+                personService.Delete(person.Id);
             }
 
-            Assert.IsEmpty(service.GetAll());
+            Assert.IsEmpty(personService.GetAll());
+        }
+        [Test]
+        public void DeletePersonsNotInList_IsThrowingException()
+        {
+            var personService = Utils.Helper.GetPersonService();
+
+            int badId = personService.GetAll().Max(x => x.Id) + 1;
+
+            Assert.ThrowsAsync<KeyNotFoundException>(() => personService.Delete(badId));
         }
 
         [Test]
         public void DuplicateEmailInPersons_IsThrowingException()
         {
             var person = new Person { Name = "Juan", SurName = "Doe", Mail = "TestDoe@gmail.com" };
-            var personWithDuplicate = new Person { Name = "Pedro", SurName = "Doe", Mail = "TestDoe@gmail.com" };
-            var service = Utils.Helper.GetPersonService();
+            var personWithMailInUse = new Person { Name = "Pedro", SurName = "Doe", Mail = "TestDoe@gmail.com" };
+            var personService = Utils.Helper.GetPersonService();
 
-            service.Add(person);
+            personService.Add(person);
 
-            Assert.ThrowsAsync<Exception>(() => service.Add(personWithDuplicate));
+            Assert.ThrowsAsync<MailInUseException>(() => personService.Add(personWithMailInUse));
         }
 
     }

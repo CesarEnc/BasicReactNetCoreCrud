@@ -1,4 +1,5 @@
-﻿using PersonsApi.Interfaces.Services;
+﻿using Persons.Api.Exceptions;
+using PersonsApi.Interfaces.Services;
 using PersonsApi.Models;
 
 namespace PersonsApi.Implementations.Services
@@ -12,7 +13,8 @@ namespace PersonsApi.Implementations.Services
         public async Task Add(Person newPerson)
         {
             var mailExist = _context.Persons.Any(x => x.Mail == newPerson.Mail);
-            if (mailExist) throw new Exception("Mail already in use");
+            if (mailExist) throw new MailInUseException($"{newPerson.Mail} Already in Use.");
+
             await _context.Persons.AddAsync(newPerson);
             await _context.SaveChangesAsync();
         }
@@ -20,7 +22,7 @@ namespace PersonsApi.Implementations.Services
         public async Task Delete(int id)
         {
             var person = await _context.Persons.FindAsync(id);
-            if (person == null) throw new Exception("User not Found");
+            if (person == null) throw new KeyNotFoundException("User not Found");
 
             _context.Persons.Remove(person);
             await _context.SaveChangesAsync();
