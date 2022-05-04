@@ -20,7 +20,7 @@ Run the app:
 ```
 Open BasicReactNetCoreCrud Solution
 
-Choose the Persons.Api proyect as the StartUp Project and Click Start
+Choose the Persons.Api project as the StartUp Project and Click Start
 
 ```
 
