@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using PersonsApi.Models;
-using System.Linq; 
+using System.Linq;
 
 namespace Persons.Tests
 {
@@ -16,7 +16,7 @@ namespace Persons.Tests
         [Test]
         public void PostPersons_IsSaving()
         {
-            var person = new Person { Name = "Juan", SurName = "ele", Mail = "Test@gmail.com"};
+            var person = new Person { Name = "Juan", SurName = "ele", Mail = "Test@gmail.com" };
             var service = Utils.Helper.GetPersonService();
             service.Add(person);
 

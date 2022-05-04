@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PersonsApi.Interfaces.Services;
 using PersonsApi.Implementations.Services;
+using PersonsApi.Interfaces.Services;
 using PersonsApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Persons.Tests.Utils
